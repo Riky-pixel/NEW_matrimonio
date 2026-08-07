@@ -105,7 +105,7 @@
       <a href="https://drive.google.com/file/d/1osPqy7llGaKZD-2Es2sdDBir5bEZBAis/view?usp=drive_link" class="btn" target="_blank">TRAILER</a>
       
       <!-- BOTTONE AREA BIMBI (Incollato correttamente qui dentro) -->
-      <a href="giochi.html" class="btn btn-bimbi">AREA BIMBI 🎨</a>
+      <a href="giochi.html" class="btn btn-bimbi" id="link-bimbi">AREA BIMBI 🎨</a>
     </div>
   </div>
 
@@ -127,6 +127,7 @@
       // Frase mostrata se qualcuno apre il link generico senza parametri
       messageElement.innerHTML = "Grazie per essere qui a festeggiare con noi!";
     }
+    document.getElementById('link-bimbi').href = "giochi.html" + window.location.search;
   </script>
 </body>
 </html>
