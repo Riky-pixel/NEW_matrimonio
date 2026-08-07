@@ -5,15 +5,85 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Area Bimbi</title>
     <style>
-        body { font-family: sans-serif; background: #f0f8ff; text-align: center; padding: 20px; }
-        .game-box { background: white; padding: 20px; margin: 10px auto; border-radius: 15px; max-width: 300px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        h2 { font-size: 1.2rem; margin-bottom: 10px; }
-        /* Tris */
-        .board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; max-width: 150px; margin: 0 auto; }
-        .cell { width: 50px; height: 50px; border: 1px solid #ccc; font-size: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-        /* Memory */
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .card { height: 60px; background: #eee; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            background: #fdf5f6; 
+            text-align: center; 
+            padding: 20px; 
+            color: #333; 
+        }
+        h1 { color: #d63384; margin-bottom: 20px; }
+        .game-box { 
+            background: white; 
+            padding: 20px; 
+            margin: 20px auto; 
+            border-radius: 15px; 
+            max-width: 350px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05); 
+        }
+        h2 { font-size: 1.2rem; margin-bottom: 15px; color: #555; }
+        
+        /* Bottoni Reset */
+        .btn-reset { 
+            background: #d63384; 
+            color: white; 
+            border: none; 
+            padding: 10px 20px; 
+            border-radius: 20px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            margin-top: 15px; 
+            transition: 0.2s;
+        }
+        .btn-reset:hover { background: #b02a6c; }
+
+        /* Stili Tris */
+        .board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; max-width: 180px; margin: 0 auto; }
+        .cell { 
+            width: 60px; height: 60px; 
+            background: #f8f9fa; 
+            border: 2px solid #e9ecef; 
+            border-radius: 8px; 
+            font-size: 35px; 
+            display: flex; align-items: center; justify-content: center; 
+            cursor: pointer; font-weight: bold; 
+        }
+        
+        /* Stili Memory */
+        .memory-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; max-width: 280px; margin: 0 auto; }
+        .card { 
+            width: 60px; height: 60px; 
+            background: #d63384; 
+            border-radius: 8px; 
+            display: flex; align-items: center; justify-content: center; 
+            font-size: 30px; 
+            cursor: pointer; 
+            color: transparent; /* Nasconde l'emoji finché non viene cliccata */
+            user-select: none;
+        }
+        .card.flipped { 
+            background: #f8f9fa; 
+            border: 2px solid #d63384; 
+            color: #000; 
+        }
+        .card.matched { 
+            background: #d4edda; 
+            border-color: #28a745; 
+            color: #000; 
+            cursor: default; 
+        }
+
+        .back-link { 
+            display: inline-block; 
+            margin-top: 20px; 
+            text-decoration: none; 
+            font-weight: bold; 
+            color: #555; 
+            border: 1px solid #ddd; 
+            padding: 12px 25px; 
+            border-radius: 30px; 
+            background: white; 
+        }
     </style>
 </head>
 <body>
@@ -22,42 +92,159 @@
     <!-- GIOCO 1: TRIS -->
     <div class="game-box">
         <h2>Tris</h2>
-        <div class="board" id="board" onclick="move(event)">
-            <div class="cell" data-i="0"></div><div class="cell" data-i="1"></div><div class="cell" data-i="2"></div>
-            <div class="cell" data-i="3"></div><div class="cell" data-i="4"></div><div class="cell" data-i="5"></div>
-            <div class="cell" data-i="6"></div><div class="cell" data-i="7"></div><div class="cell" data-i="8"></div>
+        <div class="board" id="board">
+            <div class="cell" onclick="move(0)"></div>
+            <div class="cell" onclick="move(1)"></div>
+            <div class="cell" onclick="move(2)"></div>
+            <div class="cell" onclick="move(3)"></div>
+            <div class="cell" onclick="move(4)"></div>
+            <div class="cell" onclick="move(5)"></div>
+            <div class="cell" onclick="move(6)"></div>
+            <div class="cell" onclick="move(7)"></div>
+            <div class="cell" onclick="move(8)"></div>
         </div>
+        <p id="tris-msg" style="height: 20px; margin-top: 15px; font-weight: bold; color: #d63384;"></p>
+        <button class="btn-reset" onclick="resetTris()">Ricomincia Partita</button>
     </div>
 
-    <!-- GIOCO 2: CLICCA IL CUORE (Reazione) -->
+    <!-- GIOCO 2: CLICCA IL CUORE -->
     <div class="game-box">
         <h2>Acchiappa il Cuore!</h2>
-        <button onclick="alert('Bravissimo! ❤️')" style="font-size: 30px; border: none; background: none;">❤️</button>
+        <button onclick="alert('Bravissimo! ❤️')" style="font-size: 50px; border: none; background: none; cursor: pointer; transition: transform 0.1s;" onmousedown="this.style.transform='scale(0.8)'" onmouseup="this.style.transform='scale(1)'">❤️</button>
     </div>
 
-    <!-- GIOCO 3: MEMORY SEMPLICE -->
+    <!-- GIOCO 3: MEMORY -->
     <div class="game-box">
-        <h2>Memory Veloce</h2>
-        <div class="grid" onclick="reveal(event)">
-            <div class="card" data-val="A">?</div><div class="card" data-val="B">?</div>
-            <div class="card" data-val="A">?</div><div class="card" data-val="B">?</div>
-        </div>
+        <h2>Memory degli Animali</h2>
+        <div class="memory-grid" id="memory-board"></div>
+        <button class="btn-reset" onclick="initMemory()">Ricomincia Memory</button>
     </div>
 
-    <br>
-    <a href="index.html" style="text-decoration: none; font-weight: bold;">← Torna al sito principale</a>
+    <a href="index.html" class="back-link">← Torna al sito principale</a>
 
     <script>
-        // Logica Tris
-        let b = Array(9).fill(null); let p = 'X';
-        function move(e) {
-            let i = e.target.getAttribute('data-i');
-            if(!i || b[i]) return;
-            b[i] = p; e.target.innerText = p;
-            p = p === 'X' ? 'O' : 'X';
+        // ==========================================
+        // LOGICA TRIS
+        // ==========================================
+        let board = ["", "", "", "", "", "", "", "", ""];
+        let currentPlayer = "X";
+        let gameActive = true;
+        const cells = document.querySelectorAll(".cell");
+        const msg = document.getElementById("tris-msg");
+
+        function move(index) {
+            if (board[index] !== "" || !gameActive) return; // Non fa niente se la casella è piena
+            
+            board[index] = currentPlayer;
+            cells[index].innerText = currentPlayer;
+            // X è rosa, O è azzurro
+            cells[index].style.color = currentPlayer === "X" ? "#d63384" : "#0ea5e9";
+
+            checkWin();
         }
-        // Logica Memory
-        function reveal(e) { if(e.target.className == 'card') e.target.innerText = e.target.getAttribute('data-val'); }
+
+        function checkWin() {
+            const wins = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]];
+            let roundWon = false;
+
+            for (let i = 0; i < wins.length; i++) {
+                const [a, b, c] = wins[i];
+                if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+                    roundWon = true; break;
+                }
+            }
+
+            if (roundWon) {
+                msg.innerText = `Ha vinto ${currentPlayer}! 🎉`;
+                gameActive = false;
+                return;
+            }
+
+            if (!board.includes("")) {
+                msg.innerText = "Pareggio! 🤝";
+                gameActive = false;
+                return;
+            }
+
+            currentPlayer = currentPlayer === "X" ? "O" : "X"; // Cambia turno
+        }
+
+        function resetTris() {
+            board = ["", "", "", "", "", "", "", "", ""];
+            currentPlayer = "X";
+            gameActive = true;
+            msg.innerText = "";
+            cells.forEach(cell => {
+                cell.innerText = "";
+            });
+        }
+
+        // ==========================================
+        // LOGICA MEMORY
+        // ==========================================
+        const emojis = ["🐶", "🐱", "🐰", "🐼", "🐶", "🐱", "🐰", "🐼"];
+        let cards = [];
+        let flippedCards = [];
+        let matchedPairs = 0;
+        const memBoard = document.getElementById("memory-board");
+
+        function initMemory() {
+            memBoard.innerHTML = "";
+            flippedCards = [];
+            matchedPairs = 0;
+            
+            // Mischia l'array in modo casuale
+            cards = emojis.sort(() => Math.random() - 0.5);
+
+            // Crea i bottoncini (carte)
+            cards.forEach((emoji, index) => {
+                const card = document.createElement("div");
+                card.classList.add("card");
+                card.dataset.value = emoji;
+                card.innerText = emoji; 
+                card.addEventListener("click", flipCard);
+                memBoard.appendChild(card);
+            });
+        }
+
+        function flipCard() {
+            if (flippedCards.length === 2) return; // Non fa girare più di 2 carte
+            if (this.classList.contains("flipped") || this.classList.contains("matched")) return;
+
+            this.classList.add("flipped");
+            flippedCards.push(this);
+
+            if (flippedCards.length === 2) {
+                checkMatch();
+            }
+        }
+
+        function checkMatch() {
+            const [card1, card2] = flippedCards;
+            
+            if (card1.dataset.value === card2.dataset.value) {
+                // Hanno indovinato
+                card1.classList.add("matched");
+                card2.classList.add("matched");
+                flippedCards = [];
+                matchedPairs++;
+                
+                if (matchedPairs === 4) {
+                    setTimeout(() => alert("Bravissimo! Hai trovato tutte le coppie! 🏆"), 300);
+                }
+            } else {
+                // Hanno sbagliato, le rigira dopo 1 secondo
+                setTimeout(() => {
+                    card1.classList.remove("flipped");
+                    card2.classList.remove("flipped");
+                    flippedCards = [];
+                }, 1000);
+            }
+        }
+
+        // Faccio partire i giochi quando si apre la pagina
+        resetTris();
+        initMemory();
     </script>
 </body>
 </html>
