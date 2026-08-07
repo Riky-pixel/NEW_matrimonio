@@ -120,7 +120,7 @@
         <button class="btn-reset" onclick="initMemory()">Ricomincia Memory</button>
     </div>
 
-    <a href="index.html" class="back-link">← Torna al sito principale</a>
+    <a href="index.html" class="back-link" id="link-ritorno">← Torna al sito principale</a>
 
     <script>
         // ==========================================
@@ -245,6 +245,9 @@
         // Faccio partire i giochi quando si apre la pagina
         resetTris();
         initMemory();
+
+        // Riporta i parametri speciali alla pagina principale
+        document.getElementById('link-ritorno').href = "index.html" + window.location.search;
     </script>
 </body>
 </html>
