@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Area Bimbi</title>
+    <style>
+        body { font-family: sans-serif; background: #f0f8ff; text-align: center; padding: 20px; }
+        .game-box { background: white; padding: 20px; margin: 10px auto; border-radius: 15px; max-width: 300px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h2 { font-size: 1.2rem; margin-bottom: 10px; }
+        /* Tris */
+        .board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; max-width: 150px; margin: 0 auto; }
+        .cell { width: 50px; height: 50px; border: 1px solid #ccc; font-size: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        /* Memory */
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .card { height: 60px; background: #eee; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Area Bimbi 🎨</h1>
+    
+    <!-- GIOCO 1: TRIS -->
+    <div class="game-box">
+        <h2>Tris</h2>
+        <div class="board" id="board" onclick="move(event)">
+            <div class="cell" data-i="0"></div><div class="cell" data-i="1"></div><div class="cell" data-i="2"></div>
+            <div class="cell" data-i="3"></div><div class="cell" data-i="4"></div><div class="cell" data-i="5"></div>
+            <div class="cell" data-i="6"></div><div class="cell" data-i="7"></div><div class="cell" data-i="8"></div>
+        </div>
+    </div>
+
+    <!-- GIOCO 2: CLICCA IL CUORE (Reazione) -->
+    <div class="game-box">
+        <h2>Acchiappa il Cuore!</h2>
+        <button onclick="alert('Bravissimo! ❤️')" style="font-size: 30px; border: none; background: none;">❤️</button>
+    </div>
+
+    <!-- GIOCO 3: MEMORY SEMPLICE -->
+    <div class="game-box">
+        <h2>Memory Veloce</h2>
+        <div class="grid" onclick="reveal(event)">
+            <div class="card" data-val="A">?</div><div class="card" data-val="B">?</div>
+            <div class="card" data-val="A">?</div><div class="card" data-val="B">?</div>
+        </div>
+    </div>
+
+    <br>
+    <a href="index.html" style="text-decoration: none; font-weight: bold;">← Torna al sito principale</a>
+
+    <script>
+        // Logica Tris
+        let b = Array(9).fill(null); let p = 'X';
+        function move(e) {
+            let i = e.target.getAttribute('data-i');
+            if(!i || b[i]) return;
+            b[i] = p; e.target.innerText = p;
+            p = p === 'X' ? 'O' : 'X';
+        }
+        // Logica Memory
+        function reveal(e) { if(e.target.className == 'card') e.target.innerText = e.target.getAttribute('data-val'); }
+    </script>
+</body>
+</html>
